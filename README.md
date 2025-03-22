@@ -3,10 +3,12 @@
 
 un kit composé de fichiers et de scripts pour installer une VM alpine Linux sous xenserver, puis des containers à base de metasploit pour cribler une grande quantité de cible.
 A part les scripts et les fichiers de configuration, il n'y a aucunes images statiques ni de containers.
-il y a deux types de VM :
+il y a TROIS types de VM :
 - une VM postgresql pour les containers metasploit.
 - un nombre variable de VM alpine linux avec un nombre variable de containers metasploit.
-
+- une VM metasploitDB avec metasploit console, msfrpcd pout les VM alpine linux avec containers client metasploit.
+-   Dans cette meme VM matasploit analyzer service avec slikit learn et Flask pour les Vm alpine linux et containers client metasploit
+- 
 Metasploit Module Analyzer Service
 1. Introduction
 
