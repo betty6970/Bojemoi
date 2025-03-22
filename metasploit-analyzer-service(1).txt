@@ -1,0 +1,92 @@
+#!/bin/sh
+# /etc/init.d/metasploit-analyzer
+# Alpine Linux init script for the Metasploit Module Analyzer Service
+
+NAME=metasploit-analyzer
+DAEMON=/usr/bin/python3
+DAEMON_ARGS="/opt/metasploit-analyzer/app.py --modules-dir /opt/metasploit-modules --models-dir /opt/metasploit-analyzer/models"
+PIDFILE=/var/run/$NAME.pid
+LOGFILE=/var/log/$NAME.log
+
+# Source functions library
+. /etc/init.d/functions
+
+# Check if the daemon exists
+if [ ! -x "$DAEMON" ]; then
+    echo "Daemon $DAEMON not found"
+    exit 1
+fi
+
+start() {
+    echo "Starting $NAME..."
+    # Create log file if it doesn't exist
+    if [ ! -f "$LOGFILE" ]; then
+        touch "$LOGFILE"
+        chmod 640 "$LOGFILE"
+    fi
+    
+    # Start the service
+    start-stop-daemon --start --background \
+        --make-pidfile --pidfile $PIDFILE \
+        --exec $DAEMON -- $DAEMON_ARGS > $LOGFILE 2>&1
+    
+    # Check if it started successfully
+    if [ $? -eq 0 ]; then
+        echo "$NAME started successfully"
+        return 0
+    else
+        echo "Failed to start $NAME"
+        return 1
+    fi
+}
+
+stop() {
+    echo "Stopping $NAME..."
+    start-stop-daemon --stop --pidfile $PIDFILE --retry 10
+    if [ $? -eq 0 ]; then
+        echo "$NAME stopped successfully"
+        rm -f $PIDFILE
+        return 0
+    else
+        echo "Failed to stop $NAME"
+        return 1
+    fi
+}
+
+status() {
+    if [ -f $PIDFILE ]; then
+        PID=$(cat $PIDFILE)
+        if [ -d /proc/$PID ]; then
+            echo "$NAME is running (PID: $PID)"
+            return 0
+        else
+            echo "$NAME is not running but PID file exists"
+            return 1
+        fi
+    else
+        echo "$NAME is not running"
+        return 3
+    fi
+}
+
+case "$1" in
+    start)
+        start
+        ;;
+    stop)
+        stop
+        ;;
+    restart)
+        stop
+        start
+        ;;
+    status)
+        status
+        ;;
+    *)
+        echo "Usage: $0 {start|stop|restart|status}"
+        exit 1
+        ;;
+esac
+
+exit $?
