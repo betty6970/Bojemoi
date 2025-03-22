@@ -14,6 +14,7 @@ This Statement of Work (SOW) outlines the implementation and deployment of the M
 Overview
 
 The contractor shall develop, implement, and deploy a service that analyzes Metasploit modules to categorize them, extract useful patterns, and provide a question-answering system to help users understand module functionality and characteristics. The service will use machine learning to classify modules based on their content, extract key features, and generate insights.
+
 2.2. Objectives
 
     Develop a system that automatically analyzes Metasploit modules and categorizes them
@@ -22,3 +23,4 @@ The contractor shall develop, implement, and deploy a service that analyzes Meta
     Build a Q&A system to answer questions about specific modules
     Provide a REST API for interacting with the analysis service
     Deploy the service as a background daemon on Alpine Linux
+
